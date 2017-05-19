@@ -62,4 +62,39 @@ public class CIDRvalidator {
 		matcher.find();
 		return Integer.parseInt(matcher.group(6));
 	}
+	
+	public String getCIDRdata(String cidr, CIDRdata returnWhat) {
+		
+		String returnValue;
+		
+		// do pattern match
+		Matcher matcher = pattern.matcher(cidr);
+		
+		matcher.find();
+		
+		switch(returnWhat) {
+			case BASEIP:
+				returnValue = matcher.group(1);
+				break;
+			case OCTET1:
+				returnValue = matcher.group(2);
+				break;				
+			case OCTET2:
+				returnValue = matcher.group(3);
+				break;				
+			case OCTET3:
+				returnValue = matcher.group(4);
+				break;				
+			case OCTET4:
+				returnValue = matcher.group(5);
+				break;				
+			case NETWORKMASK:
+				returnValue = matcher.group(6);
+				break;
+			default:
+				throw new AssertionError("Unknown CIDRdata enum value: " + returnWhat);
+		}
+		
+		return returnValue;
+	}
 }

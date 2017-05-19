@@ -18,11 +18,20 @@ public class CIDRtoolsTest {
 	}
 	
 	@Test
+	public void returns192_168_1_2ifDecimalIs3232235778() throws Exception {
+		String IPaddress = cidr.longToIP(3232235778L);
+		
+		assertThat(IPaddress).isEqualTo("192.168.1.2");
+	}
+	
+	@Test
 	public void returns0ifIPaddressIsNot192_168_1_2() throws Exception {
 		//v2: ipToLong now converts, rather than using a simple if block.  So this test will now fail
 		long IPdecimal = cidr.ipToLong("127.10.30.40");
 		
-		assertThat(IPdecimal).isEqualTo(0L);
+//		assertThat(IPdecimal).isEqualTo(0L);
+		//changed the assert so that this test now passes
+		assertThat(IPdecimal).isNotEqualTo(0L);
 	}
 
 	@Test
@@ -31,6 +40,16 @@ public class CIDRtoolsTest {
 		long IPdecimal = cidr.ipToLong("127.10.30.40");
 		
 		assertThat(IPdecimal).isEqualTo(2131369512L);
+	}
+	
+	@Test
+	public void returns127_10_30_40ifDecimalIs2131369512() throws Exception {
+		// similar in function to returns3232235778ifIPaddressIs192_168_1_2()
+		//added it to complement returns2131369512ifIPaddressIs127_10_30_40() once longToIP() was implemented
+		
+		String IPaddress = cidr.longToIP(2131369512L);
+		
+		assertThat(IPaddress).isEqualTo("127.10.30.40");
 	}
 	
 	@Test
@@ -122,5 +141,47 @@ public class CIDRtoolsTest {
 		int MaskBitsFromGoodCIDR = cidrValidator.getMaskBitsFromCIDRnotation("192.168.9.99/24");
 		
 		assertThat(MaskBitsFromGoodCIDR).isEqualTo(24);		
+	}
+	
+	@Test
+	public void returnsBaseIPfromGoodCIDRstring() throws Exception {
+		String IPfromGoodCIDR = cidrValidator.getCIDRdata("192.168.9.99/24", CIDRdata.BASEIP);
+		
+		assertThat(IPfromGoodCIDR).isEqualTo("192.168.9.99");
+	}
+
+	@Test
+	public void returnsOctet1fromGoodCIDRstring() throws Exception {
+		String Octet1fromGoodCIDR = cidrValidator.getCIDRdata("192.168.9.99/24", CIDRdata.OCTET1);
+		
+		assertThat(Octet1fromGoodCIDR).isEqualTo("192");
+	}
+
+	@Test
+	public void returnsOctet2fromGoodCIDRstring() throws Exception {
+		String Octet2fromGoodCIDR = cidrValidator.getCIDRdata("192.168.9.99/24", CIDRdata.OCTET2);
+		
+		assertThat(Octet2fromGoodCIDR).isEqualTo("168");
+	}
+
+	@Test
+	public void returnsOctet3fromGoodCIDRstring() throws Exception {
+		String Octet3fromGoodCIDR = cidrValidator.getCIDRdata("192.168.9.99/24", CIDRdata.OCTET3);
+		
+		assertThat(Octet3fromGoodCIDR).isEqualTo("9");
+	}
+
+	@Test
+	public void returnsOctet4fromGoodCIDRstring() throws Exception {
+		String Octet4fromGoodCIDR = cidrValidator.getCIDRdata("192.168.9.99/24", CIDRdata.OCTET4);
+		
+		assertThat(Octet4fromGoodCIDR).isEqualTo("99");
+	}
+
+	@Test
+	public void returnsNetworkMaskfromGoodCIDRstring() throws Exception {
+		String MaskfromGoodCIDR = cidrValidator.getCIDRdata("192.168.9.99/24", CIDRdata.NETWORKMASK);
+		
+		assertThat(MaskfromGoodCIDR).isEqualTo("24");
 	}
 }

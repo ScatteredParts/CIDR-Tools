@@ -23,4 +23,8 @@ public class CIDRtools {
 		return decimalIP;
 	}
 
+	public String longToIP(long ipDecimal) {
+		
+		return ((ipDecimal >> 24) & 0xFF) + "." + ((ipDecimal >> 16) & 0xFF) + "." + ((ipDecimal >> 8) & 0xFF) + "." + (ipDecimal & 0xFF);
+	}
 }
